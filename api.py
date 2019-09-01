@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import qsite
 
@@ -8,6 +8,12 @@ db = SQLAlchemy(app)
 
 @app.route("/user/new")
 def createUser():
+    newuser = qsite.User()
+    newuser.name = request.json.get("name")
+    newuser.description = request.json.get("description", None)
+    newuser.email = request.json.get("email")
+    newuser.setPassword(request.json.get("password"))
+    db.session.add(newuser)
 
 @app.route("/user/<int:id>/follow")
 def followUser(id):
