@@ -9,7 +9,7 @@ app.config["SQLALCHEMY_ECHO"] = True
 db = SQLAlchemy(app, model_class = qsite.base)
 db.create_all()
 
-@app.route("/user/new")
+@app.route("/user/new", methods = ["PUT"])
 def createUser():
     newuser = qsite.User()
     newuser.name = request.json.get("name")
