@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm.exc import NoResultFound
 import json
-import qsite
+from . import database as qsite
 from . import errors
 
 app = Flask(__name__)
