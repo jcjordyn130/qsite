@@ -1,7 +1,9 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm.exc import NoResultFound
 import json
 import qsite
+from . import errors
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///t.sql'
@@ -9,6 +11,11 @@ app.config["SQLALCHEMY_ECHO"] = True
 
 db = SQLAlchemy(app, model_class = qsite.base)
 db.create_all()
+
+# This is the handler function so flask can work with error.py errors.
+@app.errorhandler(errors.APIError)
+def handleError(exc):
+    return exc.json, exc.httpcode
 
 @app.route("/user/new", methods = ["PUT"])
 def createUser():
