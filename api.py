@@ -17,6 +17,8 @@ def createUser():
     newuser.email = request.json.get("email")
     newuser.setPassword(request.json.get("password"))
     db.session.add(newuser)
+    db.session.commit()
+    return "ok", 200
 
 @app.route("/user/<int:id>/follow")
 def followUser(id):
