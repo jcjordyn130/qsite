@@ -1,6 +1,6 @@
 import sqlalchemy
 import sqlalchemy.ext.declarative
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import sessionmaker
 import uuid
 from passlib.context import CryptContext
@@ -12,14 +12,20 @@ newsession = sessionmaker(bind = engine)
 class User(base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key = True, autoincrement = True)
-    name = Column(String, index = True)
+    id = Column(Integer, primary_key = True, autoincrement = True, nullable = False)
+    name = Column(String, index = True, nullable = False)
     description = Column(String)
-    email = Column(String)
-    passwordhash = Column(String)
+    email = Column(String, nullable = False)
+    verified = Column(Boolean, default = False, nullable = False)
+    verifytoken = Column(String)
+    passwordhash = Column(String, nullable = False)
 
     # This is used internally to be able to easily change password hashes.
     _passwordctx = CryptContext(["argon2"])
+
+    def __init__(self):
+        # Create a verification token when creating a new user.
+        self.verifytoken = uuid.uuid4().hex
 
     def setPassword(self, plaintext):
         self.passwordhash = self._passwordctx.hash(plaintext)
