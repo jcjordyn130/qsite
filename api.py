@@ -3,8 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 import qsite
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///t.sql'
-db = SQLAlchemy(app)
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///t.sql'
+app.config["SQLALCHEMY_ECHO"] = True
+
+db = SQLAlchemy(app, model_class = qsite.base)
+db.create_all()
 
 @app.route("/user/new")
 def createUser():
