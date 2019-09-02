@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm.exc import NoResultFound
+import sqlalchemy.orm.exc
 import json
 from . import database as qsite
 from . import errors
@@ -32,15 +32,19 @@ def createUser():
 def getUserVerifyToken(id):
     # TODO: this is a private API endpoint.
     # Only allow internal frontends to run this.
-    user = db.session.query(qsite.User).filter(qsite.User.id == id).one()
-    if user:
-        return json.dumps({"result": "ok", "verifytoken": user.verifytoken})
-    else:
-        return None
+    try:
+        user = db.session.query(qsite.User).filter(qsite.User.id == id).one()
+    except sqlalchemy.orm.exc.NoResultFound:
+        raise errors.NoUserFoundError()
+
+    return json.dumps({"result": "ok", "verifytoken": user.verifytoken})
 
 @app.route("/user/<int:id>/verify")
 def verifyUser(id):
-    user = db.session.query(qsite.User).filter(qsite.User.id == id).one()
+    try:
+        user = db.session.query(qsite.User).filter(qsite.User.id == id).one()
+    except sqlalchemy.orm.exc.NoResultFound:
+        raise errors.NoUserFoundError()
 
     verifytoken = request.args.get("token", None)
     if user.verifytoken == verifytoken:
