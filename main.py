@@ -1,36 +1,22 @@
-import qsite
+import requests
 
-qsite.base.metadata.create_all(qsite.engine)
-session = qsite.newsession()
+apibasepoint = "http://localhost:5000"
 
-# Make a new user.
-u = qsite.User()
-u.name = "John B Doe P.H.D"
-u.description = "Just an average Joe with a doctorate in whatever the I want."
-session.add(u)
-session.commit()
+r = requests.put(f"{apibasepoint}/user/new", json = {
+    "name": "Developer Test 1",
+    "description": "I'm just a lonely dev",
+    "email": "dev@example.org",
+    "password": "password"
+})
+result = r.json()
+print(result)
+#newuserid = result["id"]
+newuserid = 9999999999
 
-# Make another user.
-utwo = qsite.User()
-utwo.name = "Some Random User"
-utwo.descirption = " I am just a random userrssfgdfdf"
-session.add(utwo)
-session.commit()
-session.flush()
+r = requests.get(f"{apibasepoint}/user/{newuserid}/getverifytoken")
+result = r.json()
+print(result)
 
-# Make a follow.
-follow = qsite.Follow()
-follower = u.id
-followee = utwo.id
-session.add(follow)
-session.commit()
-
-# Make a new question.
-q = qsite.Question()
-q.title = "How much RAM is in a Raspberry Pi 3"
-q.details = "A Raspberry Pi 2 is acceptable as well. \n Thanks!"
-
-print(q)
-
-session.add(q)
-session.commit()
+r = requests.get(f"{apibasepoint}/user/{newuserid}/verify?token={result['verifytoken']}")
+result = r.json()
+print(result)
