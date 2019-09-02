@@ -7,7 +7,7 @@ class APIError(Exception):
     def json(self):
         raise NotImplementedError("subclasses gotta implement this!")
 
-class NoUserFoundError(Exception):
+class NoUserFoundError(APIError):
     @property
     def json(self):
         return json.dumps({"error": "ERRNOUSERFOUND"})
