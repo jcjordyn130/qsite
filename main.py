@@ -1,6 +1,6 @@
 import requests
 
-apibasepoint = "http://localhost:5000"
+apibasepoint = "http://localhost:5000/v0"
 
 r = requests.put(f"{apibasepoint}/user/new", json = {
     "name": "Developer Test 1",
@@ -10,8 +10,7 @@ r = requests.put(f"{apibasepoint}/user/new", json = {
 })
 result = r.json()
 print(result)
-#newuserid = result["id"]
-newuserid = 9999999999
+newuserid = result["id"]
 
 r = requests.get(f"{apibasepoint}/user/{newuserid}/getverifytoken")
 result = r.json()
