@@ -17,7 +17,7 @@ db.create_all()
 def handleError(exc):
     return exc.json, exc.httpcode
 
-@app.route("/user/new", methods = ["PUT"])
+@app.route("/v0/user/new", methods = ["PUT"])
 def createUser():
     newuser = qsite.User()
     newuser.name = request.json.get("name")
@@ -26,9 +26,10 @@ def createUser():
     newuser.setPassword(request.json.get("password"))
     db.session.add(newuser)
     db.session.commit()
-    return json.dumps({"result": "ok", "id": newuser.id})
 
-@app.route("/user/<int:id>/getverifytoken")
+    return json.dumps({"id": newuser.id})
+
+@app.route("/v0/user/<int:id>/getverifytoken")
 def getUserVerifyToken(id):
     # TODO: this is a private API endpoint.
     # Only allow internal frontends to run this.
@@ -37,9 +38,9 @@ def getUserVerifyToken(id):
     except sqlalchemy.orm.exc.NoResultFound:
         raise errors.NoUserFoundError()
 
-    return json.dumps({"result": "ok", "verifytoken": user.verifytoken})
+    return json.dumps({"verifytoken": user.verifytoken})
 
-@app.route("/user/<int:id>/verify")
+@app.route("/v0/user/<int:id>/verify")
 def verifyUser(id):
     try:
         user = db.session.query(qsite.User).filter(qsite.User.id == id).one()
@@ -54,7 +55,7 @@ def verifyUser(id):
         return None
 
 
-@app.route("/user/<int:id>/follow")
+@app.route("/v0/user/<int:id>/follow")
 def followUser(id):
     user = db.session.query(qsite.User).filter(qsite.User.id == id).one()
     user.follow(1, db.session)
