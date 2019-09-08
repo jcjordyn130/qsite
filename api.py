@@ -29,6 +29,21 @@ def createUser():
 
     return json.dumps({"id": newuser.id})
 
+@app.route("/v0/user/<int:id>/info", methods = ["GET"])
+def getUserInfo(id):
+    try:
+        user = db.session.query(qsite.User).filter(qsite.User.id == id).one()
+    except sqlalchemy.orm.exc.NoResultFound:
+        raise errors.NoUserFoundError()
+
+    return json.dumps({
+        "email": user.email,
+        "name": user.name,
+        "id": user.id,
+        "verified": user.verified,
+        "description": user.description
+    })
+
 @app.route("/v0/user/<int:id>/getverifytoken")
 def getUserVerifyToken(id):
     # TODO: this is a private API endpoint.

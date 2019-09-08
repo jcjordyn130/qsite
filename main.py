@@ -19,3 +19,8 @@ print(result)
 r = requests.get(f"{apibasepoint}/user/{newuserid}/verify?token={result['verifytoken']}")
 result = r.json()
 print(result)
+
+for i in range(0, 50):
+    r = requests.get(f"{apibasepoint}/user/{i}/info")
+    result = r.json()
+    print(result)
