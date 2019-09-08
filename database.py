@@ -32,7 +32,7 @@ class User(base):
         self.passwordhash = self._passwordctx.hash(plaintext)
 
     def verifyPassword(self, plaintext):
-        return self._passwordctx.verify(plaintext, self.passordhash)
+        return self._passwordctx.verify(plaintext, self.passwordhash)
 
     def follow(self, fromuser, session):
         newfollow = Follow()
