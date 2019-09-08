@@ -50,10 +50,12 @@ def verifyUser(id):
     verifytoken = request.args.get("token", None)
     if user.verifytoken == verifytoken:
         user.verified = True
-        return json.dumps({"result": "ok"})
+        user.verifytoken = None
     else:
-        return None
+        raise errors.InvalidVerifyToken()
 
+    db.session.commit()
+    raise errors.NoError()
 
 @app.route("/v0/user/<int:id>/follow")
 def followUser(id):
