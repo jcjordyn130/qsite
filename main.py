@@ -1,3 +1,4 @@
+# main.py - A really bad testing script.
 import requests
 
 apibasepoint = "http://localhost:5000/v0"

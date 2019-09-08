@@ -1,3 +1,4 @@
+# api.py - The actual API that uses the database models.
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy.orm.exc

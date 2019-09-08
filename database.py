@@ -1,3 +1,4 @@
+# database.py - The database models and helper code.
 import sqlalchemy
 import sqlalchemy.ext.declarative
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
